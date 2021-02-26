@@ -1,0 +1,25 @@
+body{margin:0}
+.carousel{
+    /* margin: auto; */
+    /* text-align:center; */
+    height:100%;
+    width:100%;
+}
+
+.logo{
+        /* height:30vh; */
+        /* text-align:center; */
+        /* margin: auto; */
+        /* border:1px black solid; */
+}
+.wrapper{
+ 
+    height:100%;
+
+}
+.wrapper img{
+ 
+    height:608px;
+    width:auto;
+
+}
