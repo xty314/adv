@@ -12,7 +12,7 @@ public partial class admin_src_category_detail : AdminBasePage
     public string[] allCategoryDirs;
     public string title;
     public List<string> files;
-    public List<string> supportedFileTypes = new List<string>(new string[]{ "jpg", "jpeg", "gif", "png", "bmp" });
+
     protected void Page_Load(object sender, EventArgs e)
     {
         title = Request.QueryString["cat"];
@@ -60,14 +60,14 @@ public partial class admin_src_category_detail : AdminBasePage
           }
           foreach( string cat in cats){
               string catPath=Server.MapPath("./category/"+cat);
-                if (System.IO.Directory.Exists(catPath))
+                if (Directory.Exists(catPath))
                 {  
-                    string destFile = System.IO.Path.Combine(catPath, file);
+                    string destFile = Path.Combine(catPath, file);
                     if(!File.Exists(destFile)){
-                        System.IO.File.Copy(filePath, destFile, true);
+                        File.Copy(filePath, destFile, true);
                     }else{
-                        destFile = System.IO.Path.Combine(catPath, "copy_"+file);
-                         System.IO.File.Copy(filePath, destFile, true);
+                        destFile = Path.Combine(catPath, "copy_"+file);
+                        File.Copy(filePath, destFile, true);
                     }          
                 }
                
@@ -80,8 +80,10 @@ public partial class admin_src_category_detail : AdminBasePage
         {
            
             string fileName = Common.GetLastDir(file);
-           // Response.Write(fileName);
+            PicName pn = new PicName(fileName);       
             string seq = Request.Form[fileName + "_seq"];
+            string startDate = Request.Form[fileName + "_start"]; 
+            string endDate = Request.Form[fileName + "_end"];
             string time= Request.Form[fileName + "_time"];
             string delete= Request.Form[fileName + "_delete"];
             string oldFilePath = Server.MapPath("./category/" + title + "/" + fileName);
@@ -99,8 +101,8 @@ public partial class admin_src_category_detail : AdminBasePage
                     time = "10";
                 }
                 string type = fileName.Substring(fileName.LastIndexOf(".") + 1);
-                string newFileName = seq + "_" + Common.RandomName(6) + "_" + time + "." + type;
-
+                string newFileName = seq + "_" +startDate+"_" + pn.Id + "_"+endDate+ "_" + time + "." + type;
+                //string newFileName = seq + "_"  + + "_" + time + "." + type;
                 string newFilePath = Server.MapPath("./category/" + title + "/" + newFileName);
              
                 if (!File.Exists(newFilePath))
@@ -131,7 +133,7 @@ public partial class admin_src_category_detail : AdminBasePage
         for (int i = 0; i < files.Length; i++)
         {
             string type = files[i].Substring(files[i].LastIndexOf(".") + 1);
-            if (supportedFileTypes.Contains(type.ToLower()))
+            if (Common.supportedFileTypes.Contains(type.ToLower()))
             {
                
                 result.Add ("/" + files[i].Replace(tmpRootDir, ""));
@@ -145,23 +147,24 @@ public partial class admin_src_category_detail : AdminBasePage
         Response.Clear();
         int count = Request.Files.Count;
 
-        string information = "";
+        string information ;
     
         try
         {
-            if (System.IO.Directory.Exists(Server.MapPath("~/ecomsrc/")) == false)
-            {
-                System.IO.Directory.CreateDirectory(Server.MapPath("~/ecomsrc/"));
-            }
+           
             string uploadFileName = Request.Files["file"].FileName;
             string type = uploadFileName.Substring(uploadFileName.LastIndexOf(".") + 1).ToLower();
-            string fileName = "0000_" + Common.RandomName(6) + "_10." + type;
+            string fileName = "0000_01-01-2020_" + Common.RandomName(6) + "_31-12-2099_10." + type;
             string imgPath = Server.MapPath("./category/" + title + "/" + fileName);
-      
-            if (supportedFileTypes.Contains(type))
+            if (File.Exists(imgPath))
+            {
+                fileName = "0001_01-01-2020_" + Common.RandomName(6) + "_31-12-2099_10." + type;
+                imgPath = Server.MapPath("./category/" + title + "/" + fileName);
+            }
+            if (Common.supportedFileTypes.Contains(type))
             {
                 Request.Files["file"].SaveAs(imgPath);
-                information = "Upload logo successfully.";
+                information = "Upload file successfully.";
      
             }
             else

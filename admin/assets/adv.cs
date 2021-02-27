@@ -15,7 +15,7 @@ public partial class v2_invoice : Page
     string category = "../admin/category";
     string configFile = "config.txt";
     string defaultPath = "/default";
-	public List<string> supportedFileTypes = new List<string>(new string[] { "jpg", "jpeg", "gif", "png", "bmp" });
+	
 	protected void Page_Load(object sender, EventArgs e)
     {
         SaveLog();
@@ -62,7 +62,7 @@ public partial class v2_invoice : Page
 
 		StringBuilder result = new StringBuilder();
 		string fullpath = Server.MapPath(configFile);
-		string content = "";
+		string content ;
 		if (!System.IO.File.Exists(fullpath))
 		{
 			content = "default";
@@ -89,11 +89,15 @@ public partial class v2_invoice : Page
 					System.IO.FileInfo[] imgs = targetDir.GetFiles();
 					for (int k = 0; k < imgs.Length; k++)
 					{
-						if(supportedFileTypes.Contains(GetFileType(imgs[k].ToString())))
-						//if (imgs[k].Name != "Thumbs.db")
-						{
-							result.Append(GetImgWrapper(dirs[j].ToString().Trim(), imgs[k].Name, imgs[k].Extension));
-						}
+						PicName pn = new PicName(imgs[k].Name);
+                        
+							if (pn.IsShow()&&Common.supportedFileTypes.Contains(GetFileType(imgs[k].ToString())))
+							//if (imgs[k].Name != "Thumbs.db")
+							{
+								result.Append(GetImgWrapper(dirs[j].ToString().Trim(), imgs[k].Name, imgs[k].Extension));
+							}
+						
+						
 
 					}
 
@@ -108,8 +112,9 @@ public partial class v2_invoice : Page
 			System.IO.FileInfo[] imgs = targetDir.GetFiles();
 			for (int k = 0; k < imgs.Length; k++)
 			{
-				//if (imgs[k].Name != "Thumbs.db")
-				if (supportedFileTypes.Contains(GetFileType(imgs[k].ToString())))
+				PicName pn = new PicName(imgs[k].Name);
+					//if (imgs[k].Name != "Thumbs.db")
+				if (pn.IsShow()&&Common.supportedFileTypes.Contains(GetFileType(imgs[k].ToString())))
 				{
 					result.Append(GetImgWrapper("default".Trim(), imgs[k].Name, imgs[k].Extension));
 				}

@@ -1,8 +1,8 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="category_detail.aspx.cs" Inherits="admin_src_category_detail"  MasterPageFile="./Master_Page/Admin_Layout/AdminLayout.master" %>
-
-<%@ Assembly Src="./common/Common.cs" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="category_detail.aspx.cs" Inherits="admin_src_category_detail" MasterPageFile="Master_Page/Admin_Layout/AdminLayout.master" %>
+<%@ Assembly Src="common/Common.cs" %>
 <asp:Content ContentPlaceHolderID="AdditionalCSS" runat="server">
     <link href="src/plugins/dropzone/dropzone.css" rel="stylesheet" />
+    <link rel="stylesheet" href="src/plugins/bootstrap-datepicker/datepicker.css">
 </asp:Content>
 
 <asp:Content ContentPlaceHolderID="Header" runat="server">
@@ -16,9 +16,11 @@
                 <div class="col-sm-6">
                     <div class="float-right">
                         <button class="btn bg-blue save-btn" data-toggle="modal"
-                            data-target="#SaveCategoryModal">Save</button>
-                        <button class="btn bg-blue add-btn" data-toggle="modal" data-target="#UploadPicModal"><i
-                                class="fa fa-file"></i> Upload new image</button>
+                            data-target="#SaveCategoryModal">
+                            Save</button>
+                        <button class="btn bg-blue add-btn" data-toggle="modal" data-target="#UploadPicModal">
+                            <i
+                                class="fa fa-file"></i>Upload new image</button>
                         <%-- <button type="button" class="btn btn-success"><i class="fa fa-download"></i>Export </button>--%>
                     </div>
                 </div>
@@ -36,27 +38,32 @@
     <section class="content">
         <form method="post" id="MainForm">
             <div class="row connectedSortable">
-                <%foreach(string file in files){
-                 string fileName=Common.GetLastDir(file);%>
+                <%foreach (string file in files)
+                    {
+                        string fileName = Common.GetLastDir(file);%>
                 <div class="col-md-2  ui-sortable img-file">
                     <!-- Box Comment -->
                     <div class="card card-widget">
                         <div class="card-header ui-sortable-handle" style="cursor: move;">
                             <h3 class="card-title">
                                 <i class="fas fa-file"></i>
-                                <%=fileName %>
+                                <%PicName pn = new PicName(fileName);%>
+                                <%=pn.ShowName() %>
                             </h3>
 
                         </div>
                         <div class="card-body ">
+                   
                             <img class="img-fluid pad mb-1" src="<%=file %>" />
 
-                            <button type="button"  data-name="<%=fileName%>" data-toggle="modal"  data-target="#CopyPicModal" class=" copy-btn btn btn-default btn-sm"><i
-                                    class="fas fa-copy"></i> Copy</button>
+                            <button type="button" data-name="<%=fileName%>" data-toggle="modal" data-target="#CopyPicModal" class=" copy-btn btn btn-default btn-sm">
+                                <i
+                                    class="fas fa-copy"></i>Copy</button>
                             <button type="button" data-name="<%=fileName%>"
-                            data-src="<%=file%>" 
-                             data-toggle="modal"  data-target="#MovePicModal" class="move-btn btn btn-default btn-sm"><i
-                                    class="fas fa-share"></i> Move</button>
+                                data-src="<%=file%>"
+                                data-toggle="modal" data-target="#MovePicModal" class="move-btn btn btn-default btn-sm">
+                                <i
+                                    class="fas fa-share"></i>Move</button>
 
                         </div>
                         <!-- /.card-body -->
@@ -79,9 +86,29 @@
                                     </div>
 
                                     <input type="hidden" class="seq" name="<%=fileName%>_seq"
-                                        value=<%=fileName.Substring(0,4)%> />
+                                        value="<%=fileName.Substring(0,4)%>" />
                                 </div>
+            
+                                <div class="form-group">
+                          
 
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control pull-right datepicker" name="<%=fileName%>_start"  value="<%=pn.StartDate %>" >
+                                         <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                To
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control pull-right datepicker"   name="<%=fileName%>_end"  value="<%=pn.EndDate %>" >
+                                      
+                                    </div>
+                                    <!-- /.input group -->
+                                </div>
                             </div>
 
                         </div>
@@ -91,9 +118,6 @@
                 </div>
 
                 <%} %>
-
-
-
             </div>
         </form>
     </section>
@@ -109,7 +133,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
                     Are you sure to save the changes?
                     <%-- <input type="hidden" class="form-control  col-sm-10" name='company' id="s_new_sscat">--%>
                 </div>
@@ -134,7 +157,6 @@
                 </div>
                 <div class="modal-body">
                     <form action="category_detail.aspx?cat=<%=title %>" class="dropzone" id='UploadPicForm'>
-
                     </form>
 
                 </div>
@@ -146,8 +168,8 @@
         </div>
     </div>
 
-      <form action="category_detail.aspx?cat=<%=title%>" method="post" >
-        <div class="modal fade"  id="CopyPicModal"  tabindex="-1" role="dialog"
+    <form action="category_detail.aspx?cat=<%=title%>" method="post">
+        <div class="modal fade" id="CopyPicModal" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
@@ -162,14 +184,14 @@
                         <div class="form-group">
                             <label>Picture Copy To</label>
                             <select class="duallistbox" multiple="multiple" name="categories">
-                                <%foreach (string cat in allCategoryDirs){
-                                    %>
-                                    
-                                <option value="<%=Common.GetLastDir(cat) %>" ><%=Common.GetLastDir(cat) %></option>
-                                <%} %>
+                                <%foreach (string cat in allCategoryDirs)
+                                    {
+                                %>
 
+                                <option value="<%=Common.GetLastDir(cat) %>"><%=Common.GetLastDir(cat) %></option>
+                                <%} %>
                             </select>
-                    <input type="hidden" name="file">
+                            <input type="hidden" name="file">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -181,8 +203,8 @@
         </div>
     </form>
 
-      <form action="category_detail.aspx?cat=<%=title%>" method="post" >
-        <div class="modal fade"  id="MovePicModal"  tabindex="-1" role="dialog"
+    <form action="category_detail.aspx?cat=<%=title%>" method="post">
+        <div class="modal fade" id="MovePicModal" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
@@ -195,15 +217,17 @@
                     <div class="modal-body">
 
                         <div class="form-group">
-                           <img class="img-fluid pad mb-1" id="move_pic"/>
+                            <img class="img-fluid pad mb-1" id="move_pic" />
                             <select name="category" class="form-control">
-                                <%foreach (string cat in allCategoryDirs){
-                                     if(Common.GetLastDir(cat)!=title){%>                                   
-                                <option value="<%=Common.GetLastDir(cat) %>" ><%=Common.GetLastDir(cat) %></option>
-                                <%}} %>
-
+                                <%foreach (string cat in allCategoryDirs)
+                                    {
+                                        if (Common.GetLastDir(cat) != title)
+                                        {%>
+                                <option value="<%=Common.GetLastDir(cat) %>"><%=Common.GetLastDir(cat) %></option>
+                                <%}
+                                    } %>
                             </select>
-                    <input type="hidden" name="file">
+                            <input type="hidden" name="file">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -217,7 +241,10 @@
 </asp:Content>
 <asp:Content ContentPlaceHolderID="AdditionalJS" runat="server">
     <script src="src/plugins/dropzone/dropzone.js"></script>
-      <script src="src/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
-    <script src="src/js/category_detail.js"></script>
+    <script src="src/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <script src="src/plugins/moment/moment.min.js"></script>
+    <script src="src/plugins/bootstrap-datepicker/datepicker.js"></script>
 
+    <script src="src/js/category_detail.js"></script>
+    
 </asp:Content>

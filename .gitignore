@@ -4,6 +4,7 @@
 !/admin/**
 !/admin/**/
 /admin/category/
+!/admin/category/default
 /admin/asiasupermarket/
 /admin/Old Document/
 

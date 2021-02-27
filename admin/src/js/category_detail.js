@@ -84,3 +84,11 @@ $(document).on("click",".move-btn",function (e) {
     $("input[name='file']").val(filename)
     $("#move_pic").attr("src",src);
 })
+
+
+
+$('.datepicker').datepicker({
+    autoclose:true,
+    format: 'dd-mm-yyyy'
+
+})

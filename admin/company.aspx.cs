@@ -128,15 +128,23 @@ public partial class v2_invoice : AdminBasePage
     public void GetCategoriesOfCompany()
     {
         string companyPath = Server.MapPath("../");
+     
         DirectoryInfo DirInfo = new DirectoryInfo(companyPath);
+    
         DirectoryInfo[] dirs = DirInfo.GetDirectories();
-        companyDirs=new List<DirectoryInfo>(dirs);
-        for(int i=0;i<companyDirs.Count;i++)
+    
+        companyDirs =new List<DirectoryInfo>();
+
+        foreach (DirectoryInfo dir in dirs)
         {
-            if (exceptCompanyDirs.Contains(companyDirs[i].ToString())){
-                companyDirs.RemoveAt(i);
+            
+            if (!exceptCompanyDirs.Contains(dir.ToString()))
+            {
+           
+                companyDirs.Add(dir);
             }
         }
+ 
 
 
 
