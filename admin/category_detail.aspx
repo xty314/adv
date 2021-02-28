@@ -40,14 +40,15 @@
             <div class="row connectedSortable">
                 <%foreach (string file in files)
                     {
-                        string fileName = Common.GetLastDir(file);%>
+                        string fileName = Common.GetLastDir(file);
+                        PicName pn = new PicName(fileName);%>
                 <div class="col-md-2  ui-sortable img-file">
                     <!-- Box Comment -->
                     <div class="card card-widget">
-                        <div class="card-header ui-sortable-handle" style="cursor: move;">
-                            <h3 class="card-title">
+                        <div class="card-header ui-sortable-handle <%=BackgroundColor(pn) %>" style="cursor: move;">
+                            <h3 class="card-title ">
                                 <i class="fas fa-file"></i>
-                                <%PicName pn = new PicName(fileName);%>
+                              
                                 <%=pn.ShowName() %>
                             </h3>
 

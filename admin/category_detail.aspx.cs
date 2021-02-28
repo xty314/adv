@@ -21,23 +21,31 @@ public partial class admin_src_category_detail : AdminBasePage
         if (Request.Form["cmd"] == "save")
         {
             SaveImgs();
+            RefreshPage();
         }
         if (Request.Form["cmd"] == "upload")
         {
-
+            //async method
             UploadPic();
+        
         }
          if (Request.Form["cmd"] == "copy")
         {
             CopyPic();
+            RefreshPage();
         }
         if (Request.Form["cmd"] == "move")
         {
             MovePic();
+            RefreshPage();
         }
         files = GetFiles();
         allCategoryDirs = Common.GetAllCategories();
 
+    }
+    private void RefreshPage()
+    {
+        Response.Write("<meta http-equiv=\"refresh\" content=\"0\">");
     }
     public void MovePic(){
         string file=Request.Form["file"];
@@ -212,5 +220,18 @@ public partial class admin_src_category_detail : AdminBasePage
 
         //}
 
+    }
+
+   public string BackgroundColor(PicName pn)
+    {
+        if (!pn.IsStart())
+        {
+            return "bg-success";
+        }
+        if (pn.IsEnd())
+        {
+            return "bg-danger";
+        }
+        return "";
     }
 }
