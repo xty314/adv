@@ -96,14 +96,14 @@ public class AdminBasePage : System.Web.UI.Page
        
         if (Session["isLogin"]==null)
         {    
-            //Response.Redirect("index.aspx");
+            Response.Redirect("index.aspx");
         }
         else
 
         {
             if (Session["isLogin"].ToString() !="true" )
             {
-                //Response.Redirect("index.aspx");
+                Response.Redirect("index.aspx");
             }
         }
     }
